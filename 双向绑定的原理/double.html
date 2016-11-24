@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    //全局的
+    var $scope = {},
+        ng_ele=[];
+
+    function setValue() {
+        var name=this.getAttribute('ng-model'),
+            val=this.value;
+
+        $scope[name] = val;
+
+        //通知所有人
+        for (var i = 0; i < ng_ele.length; i++) {
+            ng_ele[i].value = val;
+        }
+    }
+
+    //html加载完成
+    window.onload=function(){
+
+        $scope.a = '';
+
+        var eles=document.getElementsByTagName('*');        //所有由ng管理的元素
+
+        for(var i=0;i<eles.length;i++){
+            if(eles[i].getAttribute(['ng-model'])!=null){
+                ng_ele.push(eles[i]);
+                eles[i].oninput=setValue;
+            }
+        }
+    }
+</script>
+<body>
+<input type="text" ng-model="a">
+<input type="text" ng-model="a">
+</body>
+</html>
